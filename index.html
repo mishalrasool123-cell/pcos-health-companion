@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PCOS Health Companion</title>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    line-height: 1.6;
+    background: linear-gradient(135deg, #ffe6f0, #f7e8ff);
+    color: #333;
+  }
+
+  header {
+    text-align: center;
+    padding: 25px 15px;
+  }
+
+  header h1 {
+    color: #b02a6b;
+    margin-bottom: 5px;
+    font-size: 32px;
+  }
+
+  header p {
+    color: #666;
+    margin-top: 5px;
+  }
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.dashboard-card {
+  background: #fff5fa;
+  border: 1px solid #f3d6e5;
+  border-radius: 14px;
+  padding: 15px 10px;
+  text-align: center;
+}
+
+.dashboard-card span {
+  display: block;
+  font-size: 25px;
+  margin-bottom: 5px;
+}
+
+.dashboard-card strong {
+  display: block;
+  color: #b02a6b;
+}
+
+.dashboard-card small {
+  color: #777;
+}
+
+  section {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: 18px;
+    box-shadow: 0 5px 18px rgba(150, 80, 120, 0.12);
+    border: 1px solid #f3d6e5;
+  }
+
+  h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #b02a6b;
+    font-size: 23px;
+  }
+
+  h3 {
+    color: #8f2458;
+    margin-top: 20px;
+  }
+
+  label {
+    display: block;
+    margin: 10px 0;
+  }
+
+  input,
+  select {
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    background: white;
+  }
+
+  input:focus,
+  select:focus {
+    outline: none;
+    border-color: #d63384;
+    box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.12);
+  }
+
+  input[type="checkbox"] {
+    accent-color: #d63384;
+  }
+
+  button {
+    display: inline-block;
+    padding: 11px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    background: #d63384;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    transition: 0.2s;
+  }
+
+  button:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+  }
+
+  button:active {
+    transform: translateY(0);
+  }
+
+  .notice {
+    padding: 14px;
+    border-radius: 10px;
+    background: #f8f0f5;
+    border-left: 4px solid #d63384;
+
+    margin-top: 10px;
+  }
+.cycle-summary-card {
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: 12px;
+  background: #fff5fa;
+  border: 1px solid #f3d6e5;
+}
+.reminder-status {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #f8f0f5;
+  border-left: 4px solid #d63384;
+  color: #555;
+  font-size: 14px;
+}
+
+.cycle-summary-card h3 {
+  margin-top: 0;
+  color: #b02a6b;
+}
+
+.cycle-summary-card ul {
+  margin-bottom: 12px;
+}
+
+.cycle-summary-card p {
+  margin-bottom: 0;
+  font-weight: bold;
+}
+
+  #result,
+  #cycle-summary,
+  #water-status,
+  #medicine-status,
+  #bmi-result {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    background: #faf5f8;
+  }
+
+  ul {
+    padding-left: 20px;
+  }
+#stop-water-button,
+#stop-medicine-button {
+  background: #777;
+}
+
+#stop-water-button:hover,
+#stop-medicine-button:hover {
+  background: #555;
+}
+
+  @media (max-width: 600px) {
+
+    body {
+      padding: 12px;
+    }
+
+    section {
+      padding: 18px;
+      margin: 14px 0;
+    }
+
+    header h1 {
+      font-size: 27px;
+    }
+
+    input,
+    select {
+      width: 100%;
+    }
+
+    button {
+      width: 100%;
+    }
+.dashboard {
+  grid-template-columns: 1fr;
+}
+  }
+</style>
+</head>
+
+<body>
+<section>
+  <header>
+  <h1>PCOS Health Companion</h1>
+  <p>Track, learn, and stay informed about your health.</p>
+<svg viewBox="0 0 300 110" style="max-width:100%;height:auto;margin-top:10px" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="60" cy="55" r="34" fill="none" stroke="#d63384" stroke-width="6" stroke-dasharray="150 60" stroke-linecap="round"/>
+  <circle cx="60" cy="55" r="12" fill="#f7e8ff"/>
+  <g transform="translate(150 55)">
+    <ellipse rx="12" ry="26" fill="#d63384" opacity="0.75"/>
+    <ellipse rx="12" ry="26" fill="#b02a6b" opacity="0.75" transform="rotate(60)"/>
+    <ellipse rx="12" ry="26" fill="#c77dff" opacity="0.75" transform="rotate(120)"/>
+    <circle r="9" fill="#fff5fa"/>
+  </g>
+  <path d="M240 25 C262 55 268 70 240 88 C212 70 218 55 240 25 Z" fill="#c77dff" opacity="0.8"/>
+</svg>
+</header>
+<div class="dashboard">
+  <div class="dashboard-card">
+    <span>🌸</span>
+    <strong>Track</strong>
+    <small>Your cycle</small>
+  </div>
+
+  <div class="dashboard-card">
+    <span>💧</span>
+    <strong>Hydrate</strong>
+    <small>Water reminders</small>
+  </div>
+
+  <div class="dashboard-card">
+    <span>📚</span>
+    <strong>Learn</strong>
+    <small>PCOS education</small>
+  </div>
+</div>
+
+  <h2>Signs</h2>
+  <p>Tick any you have noticed:</p>
+  <label><input type="checkbox"> Irregular periods or long gaps between periods</label><br>
+  <label><input type="checkbox"> Extra hair on the face or body</label><br>
+  <label><input type="checkbox"> Acne</label><br>
+  <label><input type="checkbox"> Thinning hair on the scalp</label><br>
+  <label><input type="checkbox"> Difficulty managing weight</label><br>
+  <label><input type="checkbox"> Darker patches of skin</label><br>
+  <label><input type="checkbox"> Difficulty getting pregnant</label><br>
+  <button id="check-button">Check</button>
+  <p id="result"></p>
+</section>
+<section>
+
+  <h2>My cycle log</h2>
+  <label>First day of a period: <input type="date" id="period-date"></label><br>
+  <p>Add the start date of your last 3 to 6 periods.</p>
+  <button id="save-button">Save</button>
+<button id="clear-dates-button">Clear dates</button>
+  <div class="cycle-summary-card">
+  <h3>Cycle Tracking Summary</h3>
+  <ul id="cycles"></ul>
+  <p id="cycle-summary"></p>
+</div>
+</section>
+<section>
+<h2>Water Reminder</h2>
+
+<label>
+  Water reminder interval:
+  <select id="water-interval">
+    <option value="30">Every 30 minutes</option>
+    <option value="60" selected>Every 1 hour</option>
+    <option value="120">Every 2 hours</option>
+  </select>
+</label>
+
+<br><br>
+
+<button id="water-button">Start Water Reminder</button>
+<button id="stop-water-button">Stop Water Reminder</button>
+<div class="reminder-status" id="water-status">
+  Water reminder is currently off.
+</div>
+</section>
+
+<section>
+  <h2>Medicine Reminder</h2>
+
+  <label>
+    Medicine name:
+    <input type="text" id="medicine-name" placeholder="Enter medicine name">
+  </label>
+
+  <br><br>
+
+  <label>
+    Reminder time:
+    <input type="time" id="medicine-time">
+  </label>
+
+  <br><br>
+
+  <button id="medicine-button">Set Medicine Reminder</button>
+<button id="stop-medicine-button">Stop Medicine Reminder</button>
+<div class="reminder-status" id="medicine-status">
+  Medicine reminder is currently off.
+</div>
+</section>
+
+<section>
+  <h2>PCOS Education</h2>
+
+  <p>
+    Learn simple health information from reliable sources.
+    This section is for education and does not replace medical advice.
+  </p>
+
+  <h3>What is PCOS?</h3>
+  <p>
+    PCOS (polycystic ovary syndrome) is a common hormonal condition.
+    It can affect menstrual cycles, hormone levels, and other aspects
+    of health. Having some PCOS-related signs does not mean that a
+    person has PCOS.
+  </p>
+
+  <h3>When should you talk to a doctor?</h3>
+  <p>
+    Consider speaking with a healthcare professional if you have
+    persistent changes in your periods, symptoms that concern you,
+    or questions about your reproductive or hormonal health.
+  </p>
+
+ <h3>Important</h3>
+
+<div class="notice">
+  <strong>Remember:</strong> PCOS-related symptoms can have different
+  causes. This app cannot diagnose PCOS. If you are concerned about
+  your symptoms, consider speaking with a qualified healthcare
+  professional.
+</div>
+</section>
+
+<section>
+  <h2>Optional Health Calculator</h2>
+
+  <p>
+    This calculator provides a general estimate and is not a medical
+    assessment.
+  </p>
+
+  <label>
+    Height (cm):
+    <input type="number" id="height" min="1">
+  </label>
+
+  <br><br>
+
+  <label>
+    Weight (kg):
+    <input type="number" id="weight" min="1" step="0.1">
+  </label>
+
+  <br><br>
+
+  <button id="bmi-button">Calculate</button>
+
+  <p id="bmi-result"></p>
+</section>
+
+<section>
+  <h2>Privacy</h2>
+
+  <p>
+    This app is designed to work in your browser. The information you
+    enter is not sent to a server by this app.
+  </p>
+
+  <p>
+    This app is for general education and personal tracking only.
+    It does not diagnose PCOS or replace advice from a qualified
+    healthcare professional.
+  </p>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>
